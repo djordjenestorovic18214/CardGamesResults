@@ -1,11 +1,17 @@
-package view;
+package result.view;
 
 import java.awt.EventQueue;
+import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+import result.domain.Rezultat;
+import results.view.models.ResultTableModel;
 
 public class GUIKontroler {
 	static GlavniProzor glavniProzor;
+	private static LinkedList<Rezultat> rezultati;
 	/**
 	 * Launch the application.
 	 */
@@ -27,6 +33,10 @@ public class GUIKontroler {
 		NovaIgra novaIgra = new NovaIgra();
 		novaIgra.setVisible(true);
 		novaIgra.setLocationRelativeTo(glavniProzor.getContentPane());
+	}
+	
+	public static LinkedList<Rezultat> vratiRezultate() {
+		return rezultati;
 	}
 	
 	
@@ -56,11 +66,15 @@ public class GUIKontroler {
 			if(opcija == JOptionPane.YES_OPTION)
 				System.exit(0);
 			break;
-		
-		}
-		
+		}		
 	}
+	
 	public static void ugasiAplikaciju() {
 		showConfirmDialog("Затварање апликације...", "Да ли заиста желите да угасите апликацију?", "ДА", "НЕ", 1);
+	}
+
+	public static void zapocniIgru(int brIgraca, String txtPobeda, String txtIgracBr_1, String txtIgracBr_2,
+			String txtIgracBr_3, String txtIgracBr_4, String txtIgracBr_5, String txtIgracBr_6) {
+		ResultTableModel.napraviTabelu(txtIgracBr_1, txtIgracBr_2, txtIgracBr_3, txtIgracBr_4, txtIgracBr_5, txtIgracBr_6);
 	}
 }

@@ -1,4 +1,4 @@
-package view;
+package result.view;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -42,17 +42,19 @@ public class NovaIgra extends JFrame {
 	private JComboBox comboBox;
 	private JButton btnZapocniIgru;
 	private JButton btnPonisti;
+	private JLabel lblPobeda;
+	private JTextField txtPobeda;
 
 	/**
 	 * Create the frame.
 	 */
 	public NovaIgra() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 248, 302);
+		setBounds(100, 100, 251, 327);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[][grow]", "[][][][][][][][][]"));
+		contentPane.setLayout(new MigLayout("", "[][grow]", "[][][][][][][][][][]"));
 		contentPane.add(getLblIzaberiIgru(), "cell 0 0,alignx left");
 		contentPane.add(getComboBox(), "cell 1 0,growx");
 		contentPane.add(getLblBrojIgraca(), "cell 0 1,alignx left,aligny center");
@@ -69,8 +71,10 @@ public class NovaIgra extends JFrame {
 		contentPane.add(getTxtIgracBr_5(), "cell 1 6,growx");
 		contentPane.add(getLblIgracBr_6(), "cell 0 7,alignx left");
 		contentPane.add(getTxtIgracBr_6(), "cell 1 7,growx");
-		contentPane.add(getBtnZapocniIgru(), "cell 0 8,growx");
-		contentPane.add(getBtnPonisti(), "cell 1 8,grow");
+		contentPane.add(getLblPobeda(), "cell 0 8,alignx left");
+		contentPane.add(getTxtPobeda(), "cell 1 8,growx");
+		contentPane.add(getBtnZapocniIgru(), "cell 0 9,grow");
+		contentPane.add(getBtnPonisti(), "cell 1 9,grow");
 	}
 
 	private JLabel getLblIzaberiIgru() {
@@ -181,21 +185,33 @@ public class NovaIgra extends JFrame {
 			slider.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
 					int vrednost = slider.getValue();
+					
+					try {
+						if(vrednost == 2)
+							setVisibleCustom(true, true, false, false, false, false);
+					} catch (NullPointerException e) {
+						slider.setValue(2);
+					}
+				
 					if(vrednost == 3)
 						setVisibleCustom(true, true, true, false, false, false);
+					
 					if(vrednost == 4)
 						setVisibleCustom(true, true, true, true, false, false);
+					
 					if(vrednost == 5)
 						setVisibleCustom(true, true, true, true, true, false);
+					
 					if(vrednost == 6)
 						setVisibleCustom(true, true, true, true, true, true);
 					}
 			});
+			slider.setSnapToTicks(true);
 			slider.setPaintLabels(true);
 			slider.setPaintTicks(true);
 			slider.setValue(2);
-			slider.setMinorTickSpacing(0);
-			slider.setMajorTickSpacing(1);
+			slider.setMinorTickSpacing(1);
+			slider.setMajorTickSpacing(2);
 			slider.setMinimum(2);
 			slider.setMaximum(6);
 		}
@@ -227,20 +243,41 @@ public class NovaIgra extends JFrame {
 	private JButton getBtnZapocniIgru() {
 		if (btnZapocniIgru == null) {
 			btnZapocniIgru = new JButton("Започни игру");
+			btnZapocniIgru.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					GUIKontroler.zapocniIgru(slider.getValue(), txtPobeda.getText(), txtIgracBr_1.getText(), txtIgracBr_2.getText(), 
+							txtIgracBr_3.getText(), txtIgracBr_4.getText(), txtIgracBr_5.getText(), txtIgracBr_6.getText());
+				}
+				
+			});
 		}
 		return btnZapocniIgru;
 	}
 	private JButton getBtnPonisti() {
 		if (btnPonisti == null) {
 			btnPonisti = new JButton("Поништи");
+			btnPonisti.setPreferredSize(new Dimension(110, 23));
 			btnPonisti.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					dispose();
 				}
 			});
-			btnPonisti.setMaximumSize(new Dimension(101, 23));
+			btnPonisti.setMaximumSize(new Dimension(120, 27));
 			btnPonisti.setMinimumSize(new Dimension(101, 23));
 		}
 		return btnPonisti;
+	}
+	private JLabel getLblPobeda() {
+		if (lblPobeda == null) {
+			lblPobeda = new JLabel("Игра се до:");
+		}
+		return lblPobeda;
+	}
+	private JTextField getTxtPobeda() {
+		if (txtPobeda == null) {
+			txtPobeda = new JTextField();
+			txtPobeda.setColumns(10);
+		}
+		return txtPobeda;
 	}
 }
