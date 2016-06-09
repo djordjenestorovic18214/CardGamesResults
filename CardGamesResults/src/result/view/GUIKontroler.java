@@ -1,11 +1,17 @@
-package view;
+package result.view;
 
 import java.awt.EventQueue;
+import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
+import result.domain.Rezultat;
+import result.domain.TabelaRezultata;
+import results.view.models.ResultTableModel;
+
 public class GUIKontroler {
-	static GlavniProzor glavniProzor;
+	private static GlavniProzor glavniProzor;
+	private static TabelaRezultata tabela;
 	/**
 	 * Launch the application.
 	 */
@@ -13,6 +19,7 @@ public class GUIKontroler {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					tabela = new TabelaRezultata();
 					glavniProzor = new GlavniProzor();
 					glavniProzor.setVisible(true);
 					glavniProzor.setLocationRelativeTo(null);
@@ -23,10 +30,23 @@ public class GUIKontroler {
 		});
 	}
 	
+	//Nova igra
 	public static void pokreniNovaIgraProzor() {
 		NovaIgra novaIgra = new NovaIgra();
 		novaIgra.setVisible(true);
 		novaIgra.setLocationRelativeTo(glavniProzor.getContentPane());
+	}
+	
+	//Metoda za dodavanje novog rezultata
+	public static void dodajRezultat(String[] igraci) {
+		DodajRezultat dodajRezultat = new DodajRezultat();
+		dodajRezultat.setVisible(true);
+		dodajRezultat.setLocationRelativeTo(glavniProzor.getContentPane());
+		dodajRezultat.ispisiIgrace(igraci);
+	}
+	
+	public static LinkedList<Rezultat> vratiRezultate() {
+		return tabela.vratiRezultate();
 	}
 	
 	
@@ -56,11 +76,25 @@ public class GUIKontroler {
 			if(opcija == JOptionPane.YES_OPTION)
 				System.exit(0);
 			break;
-		
-		}
-		
+		}		
 	}
+	
 	public static void ugasiAplikaciju() {
 		showConfirmDialog("Затварање апликације...", "Да ли заиста желите да угасите апликацију?", "ДА", "НЕ", 1);
+	}
+
+	public static void zapocniIgru(String igra, int brIgraca, int poeniZaPobedu, String igrac1, String igrac2,
+			String igrac3, String igrac4, String igrac5, String igrac6) {
+		ResultTableModel.napraviTabelu(igrac1, igrac2, igrac3, igrac4, igrac5, igrac6);
+		glavniProzor.pocniIgru(igra, brIgraca, poeniZaPobedu);
+		glavniProzor.osveziTabelu();
+	}
+
+	public static void dodajRezUTabelu(LinkedList<Integer> rezultatiRunde) {
+		Rezultat r = new Rezultat();
+		r.setRedniBrojRunde(tabela.vratiRezultate().size() + 1);
+		r.setRezPoRundi(rezultatiRunde);
+		tabela.dodajRezultat(r);
+		glavniProzor.osveziTabelu();
 	}
 }
